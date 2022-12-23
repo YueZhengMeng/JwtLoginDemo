@@ -33,16 +33,22 @@ public class JwtLoginFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //如果请求登录接口
         if ("/api/login".equals(request.getRequestURI())) {
+            //如果请求方法是post
             if (request.getMethod().equals("post") || request.getMethod().equals("POST")) {
+                //从请求中读取用户名和密码
                 User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+                //从数据库中查询
                 JwtUserDetail jwtUserDetail = jwtUserDetailsService.loadUserByUsername(user.getUsername());
                 if (jwtUserDetail != null) {
                     if (user.getPassword().equals(jwtUserDetail.getPassword())) {
+                        //用户名与密码正确，则生成认证信息
                         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                                 jwtUserDetail, null, jwtUserDetail.getAuthorities());
                         usernamePasswordAuthenticationToken
                                 .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        //将认证信息加入上下文
                         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                         jwtAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, usernamePasswordAuthenticationToken);
                     }
@@ -56,6 +62,7 @@ public class JwtLoginFilter extends OncePerRequestFilter {
             else {
                 jwtAuthenticationFailureHandler.onAuthenticationFailure(request, response, new AuthenticationServiceException("http method error"));
             }
+            //处理完登录请求可以直接结束过滤器链条，不必继续进行
             return;
         }
         else {

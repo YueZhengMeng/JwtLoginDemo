@@ -1,4 +1,4 @@
-package com.shou.jwtlogindemo.dto;
+package com.shou.jwtlogindemo.utils;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;

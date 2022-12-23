@@ -26,20 +26,33 @@ public class JwtUserDetailsService implements UserDetailsService {
     public JwtUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
         User user= userDao.selectUserByName(username);
         if (user!=null) {
-            String role = user.getRole();
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-            if (role.equals("teacher")) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + "student"));
-            }
-            if (role.equals("admin")) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + "teacher"));
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + "student"));
-            }
-            return new JwtUserDetail(user.getUserID(),user.getUsername(), user.getPassword(),authorities);
+            return getUserAuthorities(user);
         } else {
             throw new UsernameNotFoundException("该用户名不存在: " + username);
         }
+    }
+
+    public JwtUserDetail loadUserByID(Integer userID) throws UsernameNotFoundException {
+        User user= userDao.selectUserByID(userID);
+        if (user!=null) {
+            return getUserAuthorities(user);
+        } else {
+            throw new UsernameNotFoundException("该用户ID不存在: " + userID);
+        }
+    }
+
+    private JwtUserDetail getUserAuthorities(User user) {
+        String role = user.getRole();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        if (role.equals("teacher")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + "student"));
+        }
+        if (role.equals("admin")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + "teacher"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + "student"));
+        }
+        return new JwtUserDetail(user.getUserID(),user.getUsername(), user.getPassword(),authorities);
     }
 
     public JwtUserDetail getLoginUser() {

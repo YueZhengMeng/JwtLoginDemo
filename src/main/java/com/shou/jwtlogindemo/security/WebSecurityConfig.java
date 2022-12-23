@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //替换用户信息的封装类，和明文密码加密器。
         auth
                 .userDetailsService(jwtUserDetailsService)
                 .passwordEncoder(new NonePasswordEncoder());
@@ -42,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        //关闭跨域防护
         httpSecurity
                 .cors()
                 .and()
@@ -54,12 +56,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/druid/**").permitAll()
                 .antMatchers("/webjars/**", "/static/**").permitAll()
-
+                //上面的部分属于静态资源
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/user/all").hasRole("admin")
                 .anyRequest().authenticated();
 
+        //关闭默认的表单登录
         httpSecurity
                 .formLogin()
                 .disable();
@@ -71,14 +74,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler);
-
+        //启动无状态模式
         httpSecurity
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+        //加入jwt请求过滤器在靠前的位置，拦截并处理一般请求
         httpSecurity
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
+        //加入jwt登录请求过滤器，专门拦截并处理登录请求
         httpSecurity
                 .addFilterBefore(jwtLoginFilter, JwtRequestFilter.class);
     }

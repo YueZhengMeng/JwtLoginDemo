@@ -1,4 +1,4 @@
-package com.shou.jwtlogindemo.dto;
+package com.shou.jwtlogindemo.utils;
 
 public enum ResultEnum {
     SUCCESS(200,"成功"),

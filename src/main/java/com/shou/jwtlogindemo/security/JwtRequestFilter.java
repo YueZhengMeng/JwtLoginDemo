@@ -35,11 +35,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
-        String username = null;
+        Integer userID = null;
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            //检查请求格式，和获取token
             String jwtToken = requestTokenHeader.substring("Bearer ".length());
             try {
-                username = JwtUtil.getUserNameFromToken(jwtToken);
+                //获取userID载荷
+                userID = JwtUtil.getUserIdFromToken(jwtToken);
             } catch (SignatureVerificationException e) {
                 SecurityContextHolder.clearContext();
                 jwtAuthenticationEntryPoint.commence(request, response, new BadCredentialsException("签名错误"));
@@ -60,13 +62,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         /*else {
             //这种情况不要终结过滤器链
-            //否则会严重影响静态资源
+            //否则会导致静态资源无法访问
+            //对于不携带token的请求，该过滤器直接放行，无视即可
             logger.warn("JWT Token does not begin with Bearer String");
         }*/
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+        if (userID != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //如果token正常，则生成认证信息，加入上下文
+            UserDetails userDetails = this.jwtUserDetailsService.loadUserByID(userID);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
             usernamePasswordAuthenticationToken

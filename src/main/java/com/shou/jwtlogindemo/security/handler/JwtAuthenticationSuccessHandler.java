@@ -1,7 +1,7 @@
 package com.shou.jwtlogindemo.security.handler;
 
-import com.shou.jwtlogindemo.dto.JwtResponseMessage;
-import com.shou.jwtlogindemo.dto.ResultEnum;
+import com.shou.jwtlogindemo.utils.JwtResponseMessage;
+import com.shou.jwtlogindemo.utils.ResultEnum;
 import com.shou.jwtlogindemo.utils.JwtUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
