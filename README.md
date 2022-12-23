@@ -3,7 +3,7 @@
 核心代码有详细注释  
 包含建库sql脚本  
 
-测试命令：  
+测试命令，使用IDEA自带的http测试工具：  
 POST http://localhost:8080/api/login
 Content-Type: application/json
 
@@ -13,4 +13,4 @@ Content-Type: application/json
 }
 
 GET http://localhost:8080/api/user/all
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzE4OTIyMTYsInVzZXJJRCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.x-olY73ycXfEHhNTADhf7P8htrIseyDCq47RVRKDG_c
+Authorization: Bearer 这里替换为token字段
