@@ -4,13 +4,13 @@
 包含建库sql脚本  
 
 测试命令，使用IDEA自带的http测试工具：  
-POST http://localhost:8080/api/login
-Content-Type: application/json
-
-{
-  "username": "admin",
-  "password": "admin"
-}
-
-GET http://localhost:8080/api/user/all
-Authorization: Bearer 这里替换为token字段
+POST http://localhost:8080/api/login  
+Content-Type: application/json  
+  
+{  
+  "username": "admin",  
+  "password": "admin"  
+}  
+  
+GET http://localhost:8080/api/user/all  
+Authorization: Bearer 这里替换为token字段  
