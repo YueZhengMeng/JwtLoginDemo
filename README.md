@@ -1,4 +1,4 @@
-一套springboard+Jwt+mybatis的登陆系统，仅后端  
+一套springboot+Jwt+mybatis的登陆系统，仅后端  
 整合了druid数据源和swagger接口管理页面  
 核心代码有详细注释  
 包含建库sql脚本  
