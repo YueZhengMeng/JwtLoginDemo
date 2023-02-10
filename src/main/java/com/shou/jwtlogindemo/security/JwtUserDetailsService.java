@@ -28,7 +28,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user!=null) {
             return getUserAuthorities(user);
         } else {
-            throw new UsernameNotFoundException("该用户名不存在: " + username);
+            return null;
         }
     }
 
