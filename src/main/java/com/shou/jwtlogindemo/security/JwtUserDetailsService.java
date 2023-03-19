@@ -28,6 +28,8 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user!=null) {
             return getUserAuthorities(user);
         } else {
+            //抛异常会出现bug，所以直接返回null，外围函数会在JwtAuthenticationFailureHandler中处理
+            //throw new UsernameNotFoundException("该用户ID不存在: " + userID);
             return null;
         }
     }
@@ -37,7 +39,9 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user!=null) {
             return getUserAuthorities(user);
         } else {
-            throw new UsernameNotFoundException("该用户ID不存在: " + userID);
+            //抛异常会出现bug，所以直接返回null，外围函数会在JwtAuthenticationFailureHandler中处理
+            //throw new UsernameNotFoundException("该用户ID不存在: " + userID);
+            return null;
         }
     }
 
